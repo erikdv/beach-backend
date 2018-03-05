@@ -14,32 +14,32 @@ app.config['MONGO_URI'] = 'mongodb://' + mongo_host + ':27017/' + mongo_db
 
 mongo = PyMongo(app)
 
-@app.route('/car', methods=['GET'])
-def get_all_cars():
-  car = mongo.db.cars
+@app.route('/beach', methods=['GET'])
+def get_all_beachs():
+  beach = mongo.db.beachs
   output = []
-  for s in car.find():
-    output.append({'name' : s['name'], 'price' : s['price']})
+  for s in beach.find():
+    output.append({'name' : s['name'], 'rating' : s['rating']})
   return jsonify({'result' : output})
 
-@app.route('/car/', methods=['GET'])
-def get_one_car(name):
-  car = mongo.db.cars
-  s = car.find_one({'name' : name})
+@app.route('/beach/', methods=['GET'])
+def get_one_beach(name):
+  beach = mongo.db.beachs
+  s = beach.find_one({'name' : name})
   if s:
-    output = {'name' : s['name'], 'price' : s['price']}
+    output = {'name' : s['name'], 'rating' : s['rating']}
   else:
     output = "No such name"
   return jsonify({'result' : output})
 
-@app.route('/car', methods=['POST'])
-def add_car():
-  car = mongo.db.cars
+@app.route('/beach', methods=['POST'])
+def add_beach():
+  beach = mongo.db.beachs
   name = request.json['name']
-  price = request.json['price']
-  car_id = car.insert({'name': name, 'price': price})
-  new_car = car.find_one({'_id': car_id })
-  output = {'name' : new_car['name'], 'price' : new_car['price']}
+  rating = request.json['rating']
+  beach_id = beach.insert({'name': name, 'rating': rating})
+  new_beach = beach.find_one({'_id': beach_id })
+  output = {'name' : new_beach['name'], 'rating' : new_beach['rating']}
   return jsonify({'result' : output})
 
 if __name__ == '__main__':
