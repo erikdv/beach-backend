@@ -17,10 +17,12 @@ mongo = PyMongo(app)
 @app.route('/beach', methods=['GET'])
 def get_all_beachs():
   beach = mongo.db.beachs
-  output = []
-  for s in beach.find():
-    output.append({'name' : s['name'], 'rating' : s['rating']})
-  return jsonify({'result' : output})
+  s = beach.find_one({})
+#  output = []
+#  for s in beach.find():
+#    output.append({'name' : s['name'], 'rating' : s['rating']})
+  output = {'name' : s['name'], 'rating' : s['rating']}
+  return jsonify({"type": "success", 'value' : output})
 
 @app.route('/beach/', methods=['GET'])
 def get_one_beach(name):
