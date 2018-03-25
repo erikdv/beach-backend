@@ -6,11 +6,11 @@ from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 
-mongo_host = os.environ.get('BACKEND_MONGO_HOST')
-mongo_db = os.environ.get('BACKEND_MONGO_DATABASE')
+mongo_host = os.environ.get('MONGO_HOST')
+mongo_database = os.environ.get('MONGO_DATABASE')
 
-app.config['MONGO_DBNAME'] = mongo_db
-app.config['MONGO_URI'] = 'mongodb://' + mongo_host + ':27017/' + mongo_db
+app.config['MONGO_DBNAME'] = mongo_database
+app.config['MONGO_URI'] = 'mongodb://' + mongo_host + ':27017/' + mongo_database
 
 mongo = PyMongo(app)
 
@@ -18,10 +18,13 @@ mongo = PyMongo(app)
 def get_all_beachs():
   beach = mongo.db.beachs
   s = beach.find_one({})
+  if s:
+    output = {'name' : s['name'], 'rating' : s['rating']}
+  else:
+    output = "No such name"
 #  output = []
 #  for s in beach.find():
 #    output.append({'name' : s['name'], 'rating' : s['rating']})
-  output = {'name' : s['name'], 'rating' : s['rating']}
   return jsonify({"type": "success", 'value' : output})
 
 @app.route('/beach/', methods=['GET'])
